@@ -46,10 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache.cs" />
+    <Compile Include="Data\GetResponse.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="Credentials.cs" />
     <Compile Include="CredentialsRepository.cs" />
     <Compile Include="Data\Error.cs" />
+    <Compile Include="Data\IncrementRequest.cs" />
+    <Compile Include="Data\IncrementResponse.cs" />
+    <Compile Include="Data\Item put requests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RESTadapter.cs" />
   </ItemGroup>

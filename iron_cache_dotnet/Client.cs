@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Web.Script.Serialization;
 
 using io.iron.ironcache.Data;
@@ -7,7 +9,7 @@ namespace io.iron.ironcache
 {
     public class Client
     {
-        private const string HOST = "mq-aws-us-east-1.iron.io";
+        private const string HOST = "cache-aws-us-east-1.iron.io";
         private const int    PORT = 443;
 
         private readonly JavaScriptSerializer _serializer;
@@ -26,6 +28,23 @@ namespace io.iron.ironcache
 
             _serializer = new JavaScriptSerializer();
             _rest = new RESTadapter(credentials, host, port, _serializer);
+        }
+
+
+        public Cache Cache(string name)
+        {
+            return new Cache(_rest, name);
+        }
+
+        public Cache this[string cacheNme]
+        {
+            get { return Cache(cacheNme); }
+        }
+
+
+        public string[] Caches(int page = 100)
+        {
+            throw new NotImplementedException();
         }
     }
 }

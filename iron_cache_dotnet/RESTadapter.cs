@@ -45,37 +45,45 @@ namespace io.iron.ironcache
             return Request("POST", endpoint, body);
         }
 
+        public string Put(string endpoint, string body)
+        {
+            return Request("PUT", endpoint, body);
+        }
+
 
         private string Request(string method, string endpoint, string body)
         {
-            string path = "/" + API_VERSION + "/projects/" + _credentials.ProjectId + "/" + endpoint;
-            string uri = PROTO + "://" + _host + ":" + _port + path;
+            var path = "/" + API_VERSION + "/projects/" + _credentials.ProjectId + "/" + endpoint;
+            var uri = PROTO + "://" + _host + ":" + _port + path;
+            Console.WriteLine(uri);
+
             var request = (HttpWebRequest)HttpWebRequest.Create(uri);
             request.ContentType = "application/json";
             request.Headers.Add("Authorization", "OAuth " + _credentials.Token);
-            request.UserAgent = "IronMQ .Net Client";
+            request.UserAgent = "IronCache .Net Client";
             request.Method = method;
             if (body != null)
             {
                 using (var write = new StreamWriter(request.GetRequestStream()))
                 {
+                    Console.WriteLine(body);
                     write.Write(body);
                     write.Flush();
                 }
             }
 
             var response = (HttpWebResponse)request.GetResponse();
-            var json = string.Empty;
+            var jsonResp = string.Empty;
             using (var reader = new StreamReader(response.GetResponseStream()))
             {
-                json = reader.ReadToEnd();
+                jsonResp = reader.ReadToEnd();
             }
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                var error = _serializer.Deserialize<Error>(json);
+                var error = _serializer.Deserialize<Error>(jsonResp);
                 throw new System.Web.HttpException((int)response.StatusCode, error.msg);
             }
-            return json;
+            return jsonResp;
         }
     }
 }
