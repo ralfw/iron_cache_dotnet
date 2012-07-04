@@ -88,5 +88,18 @@ namespace iron_cache_testing
                 c.Delete("k");
             }
         }
+
+
+        [Test]
+        public void List_caches()
+        {
+            var sut = new Client(CredentialsRepository.LoadFrom("ironmq.credentials.txt"));
+            var c = sut.Cache("test_cache");
+            c.Add("k", 0);
+            c.Delete("k");
+
+            var cacheNames = sut.Caches();
+            Assert.That(cacheNames, Is.EquivalentTo(new[] {"test_cache"}));
+        }
     }
 }

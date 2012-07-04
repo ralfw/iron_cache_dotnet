@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Linq;
 using System.Web.Script.Serialization;
-
+using Newtonsoft.Json;
 using io.iron.ironcache.Data;
 
 namespace io.iron.ironcache
@@ -13,6 +14,7 @@ namespace io.iron.ironcache
         private const int    PORT = 443;
 
         private readonly JavaScriptSerializer _serializer;
+        private readonly JsonSerializerSettings _jsonSerializerSettings = new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.None, DefaultValueHandling = DefaultValueHandling.Ignore };
         private readonly RESTadapter _rest;
 
 
@@ -42,9 +44,11 @@ namespace io.iron.ironcache
         }
 
 
-        public string[] Caches(int page = 100)
+        public string[] Caches(int page = 0, int perPage = 30)
         {
-            throw new NotImplementedException();
+            var jsonResp = _rest.Get("caches?page=" + page + "&per_page=" + perPage);
+            var listCachesResp = JsonConvert.DeserializeObject<ListCachesResponse[]>(jsonResp, _jsonSerializerSettings);
+            return listCachesResp.Select(lcr => lcr.name).ToArray();
         }
     }
 }

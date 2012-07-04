@@ -55,7 +55,6 @@ namespace io.iron.ironcache
         {
             var path = "/" + API_VERSION + "/projects/" + _credentials.ProjectId + "/" + endpoint;
             var uri = PROTO + "://" + _host + ":" + _port + path;
-            Console.WriteLine(uri);
 
             var request = (HttpWebRequest)HttpWebRequest.Create(uri);
             request.ContentType = "application/json";
@@ -66,7 +65,6 @@ namespace io.iron.ironcache
             {
                 using (var write = new StreamWriter(request.GetRequestStream()))
                 {
-                    Console.WriteLine(body);
                     write.Write(body);
                     write.Flush();
                 }
