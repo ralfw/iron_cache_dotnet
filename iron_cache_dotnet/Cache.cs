@@ -22,7 +22,7 @@ namespace io.iron.ironcache
         public object this[string key]
         {
             get { return Get<object>(key); }
-            set { Replace(key, value); }
+            set { Put(key, value); }
         }
 
 
@@ -36,6 +36,21 @@ namespace io.iron.ironcache
         {
             var jsonReq = JsonConvert.SerializeObject(new ItemReplaceRequest() { value = value, expires_in = expiresIn, replace = true });
             _rest.Put("caches/" + _name + "/items/" + key, jsonReq);            
+        }
+
+        public void Put(string key, object value, long expiresIn = 604800)
+        {
+            try
+            {
+                Replace(key, value, expiresIn);
+            }
+            catch(WebException wex)
+            {
+                if (wex.Message.ToLower().IndexOf("not found") >= 0)
+                    Add(key, value, expiresIn);
+                else
+                    throw;
+            }
         }
 
 

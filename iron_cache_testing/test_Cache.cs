@@ -57,6 +57,28 @@ namespace iron_cache_testing
             }
         }
 
+
+        [Test]
+        public void Put_get()
+        {
+            var sut = new Client(CredentialsRepository.LoadFrom("ironmq.credentials.txt"));
+            var c = sut.Cache("test_cache");
+
+            c.Put("k", "hello");
+            try
+            {
+                Assert.AreEqual("hello", c.Get("k"));
+
+                c["k"] = "world";
+                Assert.AreEqual("world", c.Get("k"));
+            }
+            finally
+            {
+                c.Delete("k");
+            }
+        }
+
+
         [Test]
         public void Delete()
         {
